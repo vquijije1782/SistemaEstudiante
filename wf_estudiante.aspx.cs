@@ -139,5 +139,15 @@ namespace SistemaEstudiante
             }
 
         }
+
+        protected void gv_clientes_RowEditing(object sender, GridViewEditEventArgs e)
+        {
+
+        }
+
+        protected void gv_clientes_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+
+        }
     }
 }

@@ -110,7 +110,7 @@
             <table class="auto-style1">
                 <tr>
                     <td class="auto-style2">
-                        <asp:GridView ID="gv_clientes" runat="server" AutoGenerateColumns="False" OnSelectedIndexChanged="gv_clientes_SelectedIndexChanged">
+                        <asp:GridView ID="gv_clientes" runat="server" AutoGenerateColumns="False" OnSelectedIndexChanged="gv_clientes_SelectedIndexChanged" OnRowEditing="gv_clientes_RowEditing" OnRowUpdating="gv_clientes_RowUpdating">
                             <Columns>
                                 <asp:BoundField DataField="cedula" HeaderText="cedula" />
                                 <asp:BoundField DataField="nombre" HeaderText="nombre" />

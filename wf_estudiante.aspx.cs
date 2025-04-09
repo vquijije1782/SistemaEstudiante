@@ -13,12 +13,12 @@ namespace SistemaEstudiante
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (true)
+            if (!IsPostBack)
             {
                 txt_cedula.Text = string.Empty;
                 txt_apellido.Text = string.Empty;
                 txt_nombre.Text = string.Empty;
-               
+                consultar();
             }
         }
 
@@ -47,7 +47,7 @@ namespace SistemaEstudiante
 
                 conn.Close();
 
-
+                consultar();
             }
             catch (Exception ex)
             {
@@ -70,6 +70,74 @@ namespace SistemaEstudiante
             {
                 chk_masculino.Checked = false;
             }
+        }
+
+        public  void consultar()
+        {
+            try
+            {
+                DataSet result = new DataSet();
+                SqlConnection conn = new SqlConnection("Data Source=localhost;Initial Catalog=Estudiante;User ID=sa;Password=desa*P2022");
+                conn.Open();
+
+                SqlDataAdapter da = new SqlDataAdapter("STP_CLIENTES", conn);
+
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+
+                da.SelectCommand.Parameters.AddWithValue("@tipo", 1);
+
+                da.Fill(result);
+
+                gv_clientes.DataSource = result.Tables[0];
+                gv_clientes.DataBind();
+
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+
+                Console.Write(ex.ToString());
+            }
+        }
+
+        protected void gv_clientes_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+
+
+                GridViewRow row = gv_clientes.SelectedRow;
+
+                string cedula = row.Cells[0].Text;
+                DataSet result = new DataSet();
+
+                SqlConnection conn = new SqlConnection("Data Source=localhost;Initial Catalog=Estudiante;User ID=sa;Password=desa*P2022");
+                conn.Open();
+                SqlDataAdapter da = new SqlDataAdapter("STP_CLIENTES", conn);
+
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+
+                da.SelectCommand.Parameters.AddWithValue("@tipo", 5);
+                da.SelectCommand.Parameters.AddWithValue("@cedula", cedula);
+
+                da.Fill(result);
+
+                if (result.Tables[0].Rows.Count > 0)
+                {
+                    txt_cedula.Text = result.Tables[0].Rows[0]["cedula"].ToString();
+                    txt_nombre.Text = result.Tables[0].Rows[0]["nombre"].ToString();
+                    txt_apellido.Text = result.Tables[0].Rows[0]["apellido"].ToString();
+                    cl_fecha_nacimiento.SelectedDate = System.Convert.ToDateTime(result.Tables[0].Rows[0]["fecha_nacimiento"].ToString());
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.Write(ex.ToString());
+            }
+
         }
     }
 }

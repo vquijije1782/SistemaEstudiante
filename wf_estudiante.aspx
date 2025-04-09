@@ -109,7 +109,19 @@
         <div>
             <table class="auto-style1">
                 <tr>
-                    <td class="auto-style2">&nbsp;</td>
+                    <td class="auto-style2">
+                        <asp:GridView ID="gv_clientes" runat="server" AutoGenerateColumns="False" OnSelectedIndexChanged="gv_clientes_SelectedIndexChanged">
+                            <Columns>
+                                <asp:BoundField DataField="cedula" HeaderText="cedula" />
+                                <asp:BoundField DataField="nombre" HeaderText="nombre" />
+                                <asp:BoundField DataField="apellido" HeaderText="apellido" />
+                                <asp:BoundField DataField="fecha_nacimiento" DataFormatString="{0:d}" HeaderText="fecha_nacimiento" />
+                                <asp:BoundField DataField="estado" HeaderText="estado" />
+                                <asp:CommandField ShowSelectButton="True" />
+                                <asp:CommandField ShowDeleteButton="True" />
+                            </Columns>
+                        </asp:GridView>
+                    </td>
                 </tr>
             </table>
         </div>

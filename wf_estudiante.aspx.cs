@@ -19,6 +19,7 @@ namespace SistemaEstudiante
                 txt_apellido.Text = string.Empty;
                 txt_nombre.Text = string.Empty;
                 consultar();
+                btn_grabar.Text = "Grabar";
             }
         }
 
@@ -26,25 +27,30 @@ namespace SistemaEstudiante
         {
             try
             {
-                
-                SqlConnection conn = new SqlConnection("Data Source=localhost;Initial Catalog=Estudiante;User ID=sa;Password=desa*P2022");
-          
+                int id_tipo = 0;
+
+                if (btn_grabar.Text == "Actualizar")
+                {
+                    id_tipo = 3;
+                }
+                else
+                {
+                    id_tipo = 2;
+                }
+
+
+                SqlConnection conn = new SqlConnection("Data Source=localhost;Initial Catalog=Estudiante;User ID=sa;Password=desa*P2022");          
                 conn.Open();
                 SqlCommand cmd = new SqlCommand("STP_CLIENTES", conn);
-
                 cmd.CommandType = CommandType.StoredProcedure;
-
-                cmd.Parameters.AddWithValue("@tipo",2);
+                cmd.Parameters.AddWithValue("@tipo", id_tipo);
                 cmd.Parameters.AddWithValue("@cedula", txt_cedula.Text.ToString());
                 cmd.Parameters.AddWithValue("@nombre", txt_nombre.Text.ToString());
                 cmd.Parameters.AddWithValue("@apellido", txt_apellido.Text.ToString());
                 cmd.Parameters.AddWithValue("@sexo", chk_femenino.Checked);
                 cmd.Parameters.AddWithValue("@fecha_nacimiento", cl_fecha_nacimiento.SelectedDate.ToShortDateString());
                 cmd.Parameters.AddWithValue("@estado", true);
-
                 int rowsAffected = cmd.ExecuteNonQuery();
-
-
                 conn.Close();
 
                 consultar();
@@ -128,9 +134,13 @@ namespace SistemaEstudiante
                     txt_nombre.Text = result.Tables[0].Rows[0]["nombre"].ToString();
                     txt_apellido.Text = result.Tables[0].Rows[0]["apellido"].ToString();
                     cl_fecha_nacimiento.SelectedDate = System.Convert.ToDateTime(result.Tables[0].Rows[0]["fecha_nacimiento"].ToString());
+                    btn_grabar.Text = "Actualizar";
                 }
+                else
+                {
+                    btn_grabar.Text = "Grabar";
 
-
+                }
             }
             catch (Exception ex)
             {
@@ -140,14 +150,44 @@ namespace SistemaEstudiante
 
         }
 
-        protected void gv_clientes_RowEditing(object sender, GridViewEditEventArgs e)
+        protected void btn_nuevo_Click(object sender, EventArgs e)
         {
-
+            txt_cedula.Text = string.Empty;
+            txt_apellido.Text = string.Empty;
+            txt_nombre.Text = string.Empty;
+            cl_fecha_nacimiento.SelectedDate = DateTime.Now;
+            consultar();
+            btn_grabar.Text = "Grabar";
         }
 
-        protected void gv_clientes_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        protected void gv_clientes_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
+            try
+            {
+                GridViewRow row = gv_clientes.SelectedRow;
+                string cedula = row.Cells[0].Text;
 
+                SqlConnection conn = new SqlConnection("Data Source=localhost;Initial Catalog=Estudiante;User ID=sa;Password=desa*P2022");
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("STP_CLIENTES", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@tipo", 4);
+                cmd.Parameters.AddWithValue("@cedula", cedula);
+                cmd.Parameters.AddWithValue("@nombre", txt_nombre.Text.ToString());
+                cmd.Parameters.AddWithValue("@apellido", txt_apellido.Text.ToString());
+                cmd.Parameters.AddWithValue("@sexo", chk_femenino.Checked);
+                cmd.Parameters.AddWithValue("@fecha_nacimiento", cl_fecha_nacimiento.SelectedDate.ToShortDateString());
+                cmd.Parameters.AddWithValue("@estado", false);
+                int rowsAffected = cmd.ExecuteNonQuery();
+                conn.Close();
+
+                consultar();
+            }
+            catch (Exception ex)
+            {
+
+                Console.Write(ex.ToString());
+            }
         }
     }
 }

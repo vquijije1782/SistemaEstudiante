@@ -89,7 +89,7 @@
                 </tr>
                 <tr>
                     <td class="auto-style2">
-                        <asp:Button ID="btn_nuevo" runat="server" Text="Nuevo" />
+                        <asp:Button ID="btn_nuevo" runat="server" Text="Nuevo" OnClick="btn_nuevo_Click" />
                     </td>
                     <td>
                         <asp:Button ID="btn_grabar" runat="server" OnClick="btn_grabar_Click" Text="Grabar" />
@@ -110,7 +110,7 @@
             <table class="auto-style1">
                 <tr>
                     <td class="auto-style2">
-                        <asp:GridView ID="gv_clientes" runat="server" AutoGenerateColumns="False" OnSelectedIndexChanged="gv_clientes_SelectedIndexChanged" OnRowEditing="gv_clientes_RowEditing" OnRowUpdating="gv_clientes_RowUpdating">
+                        <asp:GridView ID="gv_clientes" runat="server" AutoGenerateColumns="False" OnSelectedIndexChanged="gv_clientes_SelectedIndexChanged" OnRowDeleting="gv_clientes_RowDeleting">
                             <Columns>
                                 <asp:BoundField DataField="cedula" HeaderText="cedula" />
                                 <asp:BoundField DataField="nombre" HeaderText="nombre" />
